@@ -417,7 +417,7 @@ void Render(OpenGL *ogl)
 	//Прогать тут  
 
 	double center[] = { 6,0 };
-	int height = 6;
+	int height = 3;
 	glNormal3d(0, 0, -1);
 	drawpart(0, points, 9, center);
 	glNormal3d(0, 0, 1);
