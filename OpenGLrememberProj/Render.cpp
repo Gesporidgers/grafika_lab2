@@ -396,15 +396,16 @@ void Render(OpenGL *ogl)
 
 	//настройка материала
 	GLfloat amb[] = { 0.2, 0.2, 0.1, 1. };
-	GLfloat dif[] = { 0.4, 0.65, 0.5, 1. };
-	GLfloat spec[] = { 0.9, 0.8, 0.3, 1. };
+	GLfloat difpart[] = { 0.7, 0.0, 0.0, 1. };
+	GLfloat difside[] = { 0,0.9,0,1. };
+	GLfloat spec[] = { 0.9, 0.8, 0.9, 1. };
 	GLfloat sh = 0.1f * 256;
 
 
 	//фоновая
 	glMaterialfv(GL_FRONT, GL_AMBIENT, amb);
 	//дифузная
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, dif);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, difpart);
 	//зеркальная
 	glMaterialfv(GL_FRONT, GL_SPECULAR, spec); \
 		//размер блика
@@ -421,13 +422,16 @@ void Render(OpenGL *ogl)
 	glNormal3d(0, 0, 1);
 	drawpart(3, points, 9, center);
 	//glColor3d(0, 1, 0);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, difside);
 	drawSide(3, points, 9);
 	//glColor3d(0, 0, 0);
 	glNormal3d(0, 0, -1);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, difpart);
 	drawpart(0, pointsCylind, 17, CylindCTR);
 	glNormal3d(0, 0, 1);
 	drawpart(3, pointsCylind, 17, CylindCTR);
 	//glColor3d(0, 1, 0);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, difside);
 	drawSide(3, pointsCylind, 17);
 
 
