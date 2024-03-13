@@ -231,6 +231,62 @@ void keyUpEvent(OpenGL *ogl, int key)
 
 GLuint texId;
 
+
+double points[9][2]{
+	{0,0},{4,-2}, {4,-8},{6,-2},{15,-3},{14,4},{7,1},{3,8},{0,0}
+};
+double pointsCylind[17][2];
+//bool CylClculated = false;
+
+void drawpart(int height, double(*pnt)[2], int len, double* center) {
+	glPushMatrix();
+	glTranslated(0, 0, height);
+	glBegin(GL_TRIANGLES);
+	for (int i = 0; i < len - 1; i++) {
+		glVertex2dv(pnt[i + 1]);
+		glVertex2dv(center);
+		glVertex2dv(pnt[i]);
+	}
+	glEnd();
+	glPopMatrix();
+}
+
+void drawSide(int height, double(*pnt)[2], int len) {
+	glBegin(GL_QUADS);
+	for (int i = len - 1; i > 1; i--) {
+		double* point1 = pnt[i];
+		double* point2 = pnt[i - 1];
+		glVertex3d(point1[0], point1[1], 0);
+		glVertex3d(point1[0], point1[1], 3);
+		glVertex3d(point2[0], point2[1], 3);
+		glVertex3d(point2[0], point2[1], 0);
+	}
+	double* point1 = pnt[0];
+	double* point2 = pnt[1];
+	glVertex3d(point1[0], point1[1], 0);
+	glVertex3d(point1[0], point1[1], 3);
+	glVertex3d(point2[0], point2[1], 3);
+	glVertex3d(point2[0], point2[1], 0);
+	glEnd();
+}
+
+void calcCylinder(double* point1, double* point2, double(*pnt)[2], double* center) {
+
+
+	int ind = 0;
+	pnt[ind][0] = center[0] + 3.5 * cos(272 * 3.1415926535897932 / 180);
+	pnt[ind][1] = center[1] + 3.5 * sin(272 * 3.1415926535897932 / 180);
+	ind++;
+	for (int i = 284; i < 462; i += 12) {
+		pnt[ind][0] = center[0] + 3.5 * cos(i * 3.1415926535897932 / 180);
+		pnt[ind][1] = center[1] + 3.5 * sin(i * 3.1415926535897932 / 180);
+		ind++;
+	}
+	pnt[ind][0] = center[0] + 3.5 * cos(462 * 3.1415926535897932 / 180);
+	pnt[ind][1] = center[1] + 3.5 * sin(462 * 3.1415926535897932 / 180);
+}
+double CylindCTR[] = { (points[4][0] + points[5][0]) / 2, (points[4][1] + points[5][1]) / 2 };
+
 //выполняется перед первым рендером
 void initRender(OpenGL *ogl)
 {
@@ -300,8 +356,9 @@ void initRender(OpenGL *ogl)
 
 	camera.fi1 = -1.3;
 	camera.fi2 = 0.8;
+	calcCylinder(points[4], points[5], pointsCylind, CylindCTR);
+	
 }
-
 
 
 
@@ -348,29 +405,23 @@ void Render(OpenGL *ogl)
 	//===================================
 	//Прогать тут  
 
+	double center[] = { 6,0 };
 
-	//Начало рисования квадратика станкина
-	double A[2] = { -4, -4 };
-	double B[2] = { 4, -4 };
-	double C[2] = { 4, 4 };
-	double D[2] = { -4, 4 };
+	drawpart(0, points, 9, center);
+	drawpart(3, points, 9, center);
+	glColor3d(0, 1, 0);
+	drawSide(3, points, 9);
+	glColor3d(0, 0, 0);
+	drawpart(0, pointsCylind, 17, CylindCTR);
+	drawpart(3, pointsCylind, 17, CylindCTR);
+	glColor3d(0, 1, 0);
+	drawSide(3, pointsCylind, 17);
 
-	glBindTexture(GL_TEXTURE_2D, texId);
 
-	glColor3d(0.6, 0.6, 0.6);
-	glBegin(GL_QUADS);
 
-	glNormal3d(0, 0, 1);
-	glTexCoord2d(0, 0);
-	glVertex2dv(A);
-	glTexCoord2d(1, 0);
-	glVertex2dv(B);
-	glTexCoord2d(1, 1);
-	glVertex2dv(C);
-	glTexCoord2d(0, 1);
-	glVertex2dv(D);
 
-	glEnd();
+
+
 	//конец рисования квадратика станкина
 
 
