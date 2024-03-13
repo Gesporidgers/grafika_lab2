@@ -256,6 +256,11 @@ void drawSide(int height, double(*pnt)[2], int len) {
 	for (int i = len - 1; i > 1; i--) {
 		double* point1 = pnt[i];
 		double* point2 = pnt[i - 1];
+		Vector3 vect1(point1[0] - point1[0], point1[1] - point1[1], 0 - 3);
+		Vector3 vect2(point2[0] - point1[0], point2[1] - point1[1], 3 - 3);
+		Vector3 normal = vect2.vectProisvedenie(vect1).normolize();
+		const double* normall = normal.toArray();
+		glNormal3dv(normall);
 		glVertex3d(point1[0], point1[1], 0);
 		glVertex3d(point1[0], point1[1], 3);
 		glVertex3d(point2[0], point2[1], 3);
@@ -263,6 +268,11 @@ void drawSide(int height, double(*pnt)[2], int len) {
 	}
 	double* point1 = pnt[0];
 	double* point2 = pnt[1];
+	Vector3 vect1(point1[0] - point1[0], point1[1] - point1[1], 0 - 3);
+	Vector3 vect2(point2[0] - point1[0], point2[1] - point1[1], 3 - 3);
+	Vector3 normal = vect1.vectProisvedenie(vect2).normolize();
+	const double* normall = normal.toArray();
+	glNormal3dv(normall);
 	glVertex3d(point1[0], point1[1], 0);
 	glVertex3d(point1[0], point1[1], 3);
 	glVertex3d(point2[0], point2[1], 3);
@@ -406,15 +416,18 @@ void Render(OpenGL *ogl)
 	//Прогать тут  
 
 	double center[] = { 6,0 };
-
+	glNormal3d(0, 0, -1);
 	drawpart(0, points, 9, center);
+	glNormal3d(0, 0, 1);
 	drawpart(3, points, 9, center);
-	glColor3d(0, 1, 0);
+	//glColor3d(0, 1, 0);
 	drawSide(3, points, 9);
-	glColor3d(0, 0, 0);
+	//glColor3d(0, 0, 0);
+	glNormal3d(0, 0, -1);
 	drawpart(0, pointsCylind, 17, CylindCTR);
+	glNormal3d(0, 0, 1);
 	drawpart(3, pointsCylind, 17, CylindCTR);
-	glColor3d(0, 1, 0);
+	//glColor3d(0, 1, 0);
 	drawSide(3, pointsCylind, 17);
 
 
