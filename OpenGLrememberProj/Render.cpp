@@ -244,8 +244,14 @@ void drawpart(int height, double(*pnt)[2], int len, double* center) {
 	glTranslated(0, 0, height);
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i < len - 1; i++) {
+		double texCoord1[2] = { (pnt[i + 1][0]) / sizeUV_square, (pnt[i + 1][1] + coefficient_Y) / sizeUV_square };
+		glTexCoord2dv(texCoord1);
 		glVertex2dv(pnt[i + 1]);
+		double texCoord2[2] = { (center[0]) / sizeUV_square, (center[1] + coefficient_Y) / sizeUV_square };
+		glTexCoord2dv(texCoord2);
 		glVertex2dv(center);
+		double texCoord3[2] = { (pnt[i][0]) / sizeUV_square, (pnt[i][1] + coefficient_Y) / sizeUV_square };
+		glTexCoord2dv(texCoord3);
 		glVertex2dv(pnt[i]);
 	}
 	glEnd();
@@ -407,12 +413,12 @@ void Render(OpenGL *ogl)
 
 	//настройка материала
 	GLfloat amb[] = { 0.2, 0.2, 0.1, 1. };
-	GLfloat difpart[] = { 0.7, 0.0, 0.0, 1. };
-	GLfloat difside[] = { 0,0.9,0,1. };
+	GLfloat difpart[] = { 0.0, 0.7, 0.5, 1. };
+	GLfloat difside[] = { 0.9,0.1,0.1,1. };
 	GLfloat spec[] = { 0.9, 0.8, 0.9, 1. };
 	GLfloat sh = 0.1f * 256;
 
-
+	glBindTexture(GL_TEXTURE_2D, texId);
 	//фоновая
 	glMaterialfv(GL_FRONT, GL_AMBIENT, amb);
 	//дифузная
