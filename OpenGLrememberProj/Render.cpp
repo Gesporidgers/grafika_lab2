@@ -236,7 +236,8 @@ double points[9][2]{
 	{0,0},{4,-2}, {4,-8},{6,-2},{15,-3},{14,4},{7,1},{3,8},{0,0}
 };
 double pointsCylind[17][2];
-//bool CylClculated = false;
+double sizeUV_square;
+double coefficient_Y;
 
 void drawpart(int height, double(*pnt)[2], int len, double* center) {
 	glPushMatrix();
@@ -367,7 +368,17 @@ void initRender(OpenGL *ogl)
 	camera.fi1 = -1.3;
 	camera.fi2 = 0.8;
 	calcCylinder(points[4], points[5], pointsCylind, CylindCTR);
-	
+	double max_X = 0, max_Y = 0;
+	for (double* point : points) {
+		max_X = max(point[0], max_X);
+		max_Y = max(point[1], max_Y);
+	}
+	for (double* point : pointsCylind) {
+		max_X = max(point[0], max_X);
+		max_Y = max(point[1], max_Y);
+	}
+	sizeUV_square = max(max_X, max_Y);
+	coefficient_Y = max_Y;
 }
 
 
